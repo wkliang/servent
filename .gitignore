@@ -18,6 +18,7 @@
 
 ###
 tmp
+shttpd
 tags
 cscope.out
 *.?[0-9]
