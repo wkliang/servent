@@ -1,0 +1,111 @@
+/*
+    resource.rc - resource script
+*/
+#include <windows.h>
+#include "resource.h"
+
+#define RC_MENU_FILE POPUP "&File" {	\
+	POPUP "New Window" {	\
+		MENUITEM "New &Hello",          IDM_DEMO_HELLO	\
+		MENUITEM "New &Rectangles",     IDM_DEMO_RECT	\
+		MENUITEM "New GDI Demo",	IDM_DEMO_GDI	\
+		MENUITEM "New Dialog Demo",	IDM_DEMO_DIALOG	\
+		MENUITEM "New Dialog Demo #1",	IDM_DEMO_DIALOG+1	\
+	}	\
+	MENUITEM "&New",	IDM_FILE_NEW	\
+	MENUITEM "&Open",	IDM_FILE_OPEN	\
+	MENUITEM "&Save",	IDM_FILE_SAVE	\
+	MENUITEM "Save &As",	IDM_FILE_SAVEAS	\
+        MENUITEM SEPARATOR	\
+	MENUITEM "P&rinter Setup",	IDM_FILE_PRINTER, GRAYED INACTIVE	\
+	MENUITEM "Page Set&up",		IDM_FILE_PAGE, GRAYED INACTIVE	\
+	MENUITEM "&Print",		IDM_FILE_PRINT	\
+	MENUITEM SEPARATOR	\
+        MENUITEM "&Exit",               IDM_FILE_EXIT	\
+    }
+
+#define RC_MENU_WINDOW POPUP "&Window" {	\
+        MENUITEM "&Cascade\tShift+F5",  IDM_WINDOW_CASCADE	\
+        MENUITEM "&Tile\tShift+F4",     IDM_WINDOW_TILE		\
+        MENUITEM "Arrange &Icons",      IDM_WINDOW_ARRANGE	\
+        MENUITEM "Previous window",     IDM_WINDOW_PREV		\
+        MENUITEM "Next window",         IDM_WINDOW_NEXT		\
+        MENUITEM "Close &All",          IDM_WINDOW_CLOSEALL	\
+    }
+#define RC_MENU_EDIT POPUP "&Edit" {	\
+	MENUITEM "&Undo",	IDM_EDIT_UNDO	\
+	MENUITEM "&Redo",	IDM_EDIT_REDO	\
+	MENUITEM SEPARATOR	\
+	MENUITEM "Cu&t",	IDM_EDIT_CUT	\
+	MENUITEM "&Copy",	IDM_EDIT_COPY	\
+	MENUITEM "&Paste",	IDM_EDIT_PASTE	\
+}
+#define RC_MENU_HELP POPUP "&Help" {	\
+	MENUITEM "&Help Topics",	IDM_HELP_TOPICS	\
+	MENUITEM "&What's This?",	IDM_HELP_WHAT	\
+	MENUITEM SEPARATOR	\
+	MENUITEM "&About",		IDM_HELP_ABOUT	\
+}
+
+MdiMenuInit MENU {
+	RC_MENU_FILE
+	RC_MENU_HELP
+}
+
+MdiMenuHello MENU {
+	RC_MENU_FILE
+	RC_MENU_WINDOW
+	POPUP "&Color" {
+		MENUITEM "&Black",	IDM_BLACK
+		MENUITEM "&Red",	IDM_RED
+		MENUITEM "&Green",	IDM_GREEN
+		MENUITEM "&Blue",	IDM_BLUE
+		MENUITEM "&White",	IDM_WHITE
+	}
+	RC_MENU_HELP
+}
+
+MdiMenuWindow MENU {
+	RC_MENU_FILE
+	RC_MENU_WINDOW
+	RC_MENU_HELP
+}
+
+HostDialog DIALOG 6, 18, 134, 50
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "New Connection"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "&Host:", IDD_HOST_LABEL, 6, 8, 20, 8
+    EDITTEXT        IDD_HOST_TEXT, 28, 6, 100, 12, ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK", IDOK, 19, 30, 40, 14
+    PUSHBUTTON      "Cancel", IDCANCEL, 75, 30, 40, 14
+END
+
+myAccel ACCELERATORS 
+{
+	"A", 100, ASCII			// Shift-A
+	"q", 100, ALT			// Alt-Q
+	"x", IDM_FILE_EXIT, ALT		// Alt-x
+	"z", IDM_HELP_ABOUT, ALT	// Alt-z
+	"^Z", IDM_HELP_ABOUT, ASCII	// Ctrl-Z
+
+	VK_F5, IDM_WINDOW_CASCADE, VIRTKEY, SHIFT
+	VK_F4, IDM_WINDOW_TILE, VIRTKEY, SHIFT
+}
+
+IDTB_BMP BITMAP mdi02.bmp
+// MyBmp1 BITMAP \win95\clouds.bmp
+// MyBmp1 BITMAP \windows\winlogo.bmp
+
+IDI_MyICO ICON DISCARDABLE mdi02.ico
+
+IDI_MyDLG DIALOG DISCARDABLE  0, 0, 186, 95
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,129,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,24,50,14
+END
+

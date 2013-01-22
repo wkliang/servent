@@ -1,0 +1,66 @@
+/*
+ * Copyright (c) 2004-2005 Sergey Lyubka <valenok@gmail.com>
+ * All rights reserved
+ *
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * Sergey Lyubka wrote this file.  As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return.
+ */
+
+#include "defs.h"
+
+void
+_shttpd_ssl_handshake(struct stream *stream)
+{
+	int	n;
+
+	if ((n = SSL_accept(stream->chan.ssl.ssl)) == 1) {
+		MY_DEBUG("handshake: SSL accepted\n");
+		stream->flags |= FLAG_SSL_ACCEPTED;
+	} else {
+		n = SSL_get_error(stream->chan.ssl.ssl, n);
+		if (n != SSL_ERROR_WANT_READ && n != SSL_ERROR_WANT_WRITE)
+			stream->flags |= FLAG_CLOSED;
+		MY_DEBUG("SSL_accept error %d\n", n);
+	}
+}
+
+static int
+read_ssl(struct stream *stream, void *buf, size_t len)
+{
+	int	nread = -1;
+
+	assert(stream->chan.ssl.ssl != NULL);
+
+	if (!(stream->flags & FLAG_SSL_ACCEPTED))
+		_shttpd_ssl_handshake(stream);
+
+	if (stream->flags & FLAG_SSL_ACCEPTED)
+		nread = SSL_read(stream->chan.ssl.ssl, buf, len);
+
+	return (nread);
+}
+
+static int
+write_ssl(struct stream *stream, const void *buf, size_t len)
+{
+	assert(stream->chan.ssl.ssl != NULL);
+	return (SSL_write(stream->chan.ssl.ssl, buf, len));
+}
+
+static void
+close_ssl(struct stream *stream)
+{
+	assert(stream->chan.ssl.sock != -1);
+	assert(stream->chan.ssl.ssl != NULL);
+	(void) closesocket(stream->chan.ssl.sock);
+	SSL_free(stream->chan.ssl.ssl);
+}
+
+const struct io_class	_shttpd_io_ssl =  {
+	"ssl",
+	read_ssl,
+	write_ssl,
+	close_ssl
+};

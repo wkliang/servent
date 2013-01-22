@@ -1,0 +1,34 @@
+
+Viewing Your Staged and Unstaged Changes
+
+If the git status command is too vague for you —
+you want to know exactly what you changed, not just which files were changed —
+you can use the git diff command.
+
+We’ll cover git diff in more detail later;
+but you’ll probably use it most often to answer these two questions:
+
+	What have you changed but not yet staged?
+	And what have you staged that you are about to commit?
+
+Although git status answers those questions very generally,
+git diff shows you the exact lines added and removed — the patch, as it were.
+
+[note]
+
+git needs you to know what working status is exactly and
+what to do for next step.
+
+[text]
+
+It’s important to note that git diff by itself doesn’t show all changes made
+since your last commit — only changes that are still unstaged.
+
+This can be confusing, because if you’ve staged all of your changes,
+git diff will give you no output.
+
+[note]
+
+to integrate with iaxclient_lib and to use it as crossplatform library.
+there are some parts needed to be enhanced for original SHTTPD codebase.
+

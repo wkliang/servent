@@ -15,3 +15,12 @@
 *.exe
 *.out
 *.app
+
+###
+tmp
+tags
+cscope.out
+*.?[0-9]
+test*
+try*
+
